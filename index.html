@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team 2 People: Manager & Developer OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Kanit', 'sans-serif'],
+                    },
+                    colors: {
+                        gray: {
+                            850: '#1f2937',
+                            900: '#111827',
+                            950: '#0b0f19',
+                        },
+                        manager: {
+                            DEFAULT: '#3b82f6', // Blue
+                            dark: '#1d4ed8'
+                        },
+                        dev: {
+                            DEFAULT: '#10b981', // Emerald
+                            dark: '#047857'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f172a; /* Slate 900 */
+            color: #e2e8f0;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .tab-btn.active {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        .role-badge-manager {
+            background-color: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+        .role-badge-dev {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        /* Animation Styles - Moved here to fix SecurityError */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col md:flex-row">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-full md:w-64 bg-gray-900 border-r border-gray-800 flex-shrink-0 flex flex-col fixed md:relative z-20 h-auto md:h-screen">
+        <div class="p-6 border-b border-gray-800">
+            <h1 class="text-xl font-bold text-white tracking-wider flex items-center gap-2">
+                <i class="fa-solid fa-cube text-blue-500"></i> TEAM OS
+            </h1>
+            <p class="text-xs text-gray-500 mt-1">2 People Operation System</p>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+            <button onclick="switchTab('rules')" class="tab-btn w-full text-left px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-all flex items-center gap-3 active" id="btn-rules">
+                <i class="fa-solid fa-scale-balanced w-5"></i>
+                <div>
+                    <div class="font-semibold">Operating Rules</div>
+                    <div class="text-[10px] opacity-70">กฎการทำงาน</div>
+                </div>
+            </button>
+            
+            <button onclick="switchTab('masterboard')" class="tab-btn w-full text-left px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-all flex items-center gap-3" id="btn-masterboard">
+                <i class="fa-solid fa-table-columns w-5"></i>
+                <div>
+                    <div class="font-semibold">Master Board</div>
+                    <div class="text-[10px] opacity-70">บอร์ดหลัก (Execution)</div>
+                </div>
+            </button>
+
+            <button onclick="switchTab('phases')" class="tab-btn w-full text-left px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-all flex items-center gap-3" id="btn-phases">
+                <i class="fa-solid fa-timeline w-5"></i>
+                <div>
+                    <div class="font-semibold">Roadmap & Phases</div>
+                    <div class="text-[10px] opacity-70">แผนงาน Phase 0-5</div>
+                </div>
+            </button>
+
+            <button onclick="switchTab('roles')" class="tab-btn w-full text-left px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-all flex items-center gap-3" id="btn-roles">
+                <i class="fa-solid fa-user-tag w-5"></i>
+                <div>
+                    <div class="font-semibold">Role Boards</div>
+                    <div class="text-[10px] opacity-70">Manager & Dev Boards</div>
+                </div>
+            </button>
+
+            <button onclick="switchTab('sync')" class="tab-btn w-full text-left px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-all flex items-center gap-3" id="btn-sync">
+                <i class="fa-solid fa-handshake w-5"></i>
+                <div>
+                    <div class="font-semibold">Sync & Rules</div>
+                    <div class="text-[10px] opacity-70">ประชุม & กฎทอง</div>
+                </div>
+            </button>
+        </nav>
+
+        <div class="p-4 border-t border-gray-800">
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                <span class="text-xs text-gray-400">System Online</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-4 md:p-8 overflow-y-auto h-screen relative bg-slate-900">
+        
+        <!-- SECTION 1: OPERATING RULES -->
+        <div id="rules" class="content-section animate-fade-in space-y-6">
+            <header class="mb-8">
+                <h2 class="text-3xl font-bold text-white mb-2">Team Operating Rules <span class="text-gray-500 text-xl font-normal">| กฎกติกาของทีม</span></h2>
+                <p class="text-gray-400">Core responsibilities and boundaries for the 2-person team.</p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Manager Card -->
+                <div class="glass-panel rounded-xl p-6 border-l-4 border-blue-500">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-full bg-blue-900/50 flex items-center justify-center text-blue-400 text-xl">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Manager</h3>
+                            <p class="text-blue-400 text-sm">Business Owner</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="text-sm uppercase tracking-wider text-gray-500 font-semibold mb-2">Responsibilities (รับผิดชอบ)</h4>
+                            <ul class="space-y-2 text-sm text-gray-300">
+                                <li class="flex gap-2"><i class="fa-solid fa-check text-blue-500 mt-1"></i> Strategy & Direction (กลยุทธ์ทิศทาง)</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-check text-blue-500 mt-1"></i> Legal & Compliance (กฎหมาย)</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-check text-blue-500 mt-1"></i> Partner / Property Owner Relations</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-check text-blue-500 mt-1"></i> Market Feedback & Validation</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-check text-blue-500 mt-1"></i> <strong>Prioritize Tasks</strong></li>
+                            </ul>
+                        </div>
+                        <div class="pt-4 border-t border-gray-700">
+                            <h4 class="text-sm uppercase tracking-wider text-red-400 font-semibold mb-2">Do Not (ไม่ทำ)</h4>
+                            <ul class="space-y-2 text-sm text-gray-400">
+                                <li class="flex gap-2"><i class="fa-solid fa-xmark text-red-500 mt-1"></i> Touch the Code (ไม่ลงโค้ด)</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-xmark text-red-500 mt-1"></i> Micro-manage UX details (ไม่แก้รายละเอียด UX จุกจิก)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dev Card -->
+                <div class="glass-panel rounded-xl p-6 border-l-4 border-green-500">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-full bg-green-900/50 flex items-center justify-center text-green-400 text-xl">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Developer</h3>
+                            <p class="text-green-400 text-sm">System Owner</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="text-sm uppercase tracking-wider text-gray-500 font-semibold mb-2">Responsibilities (รับผิดชอบ)</h4>
+                            <ul class="space-y-2 text-sm text-gray-300">
+                                <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-1"></i> System / Code / Automation</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-1"></i> AI Integration Strategy</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-1"></i> Performance & Security</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-1"></i> Deploy / Fix / Improve</li>
+                            </ul>
+                        </div>
+                        <div class="pt-4 border-t border-gray-700">
+                            <h4 class="text-sm uppercase tracking-wider text-red-400 font-semibold mb-2">Do Not (ไม่ทำ)</h4>
+                            <ul class="space-y-2 text-sm text-gray-400">
+                                <li class="flex gap-2"><i class="fa-solid fa-xmark text-red-500 mt-1"></i> Decide Business Model (ไม่ตัดสินโมเดลธุรกิจ)</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-xmark text-red-500 mt-1"></i> Legal Handling (ไม่คุยกฎหมายเอง)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: MASTER BOARD -->
+        <div id="masterboard" class="content-section hidden space-y-6">
+            <header class="flex justify-between items-end mb-6">
+                <div>
+                    <h2 class="text-3xl font-bold text-white mb-1">Master Execution Board</h2>
+                    <p class="text-gray-400">Flow-based work management. No long to-do lists.</p>
+                </div>
+                <div class="bg-gray-800 px-4 py-2 rounded-lg border border-gray-700 text-sm text-gray-300">
+                    <i class="fa-regular fa-clock text-yellow-500 mr-2"></i> Rule: 1 Card = Done in 3-7 Days
+                </div>
+            </header>
+
+            <!-- Kanban Columns -->
+            <div class="flex overflow-x-auto gap-4 pb-4 min-h-[500px]">
+                
+                <!-- Col 1 -->
+                <div class="min-w-[280px] w-[280px] flex-shrink-0 bg-gray-850 rounded-xl p-3 border border-gray-800">
+                    <div class="flex items-center justify-between mb-4 px-1">
+                        <span class="font-bold text-blue-400">🧠 Manager Planning</span>
+                        <span class="bg-gray-700 text-xs px-2 py-1 rounded">2</span>
+                    </div>
+                    <!-- Card Example -->
+                    <div class="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-blue-500 cursor-pointer shadow-sm transition-all mb-3">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="bg-blue-900/30 text-blue-300 text-[10px] px-2 py-0.5 rounded border border-blue-900">Phase 1</span>
+                            <div class="w-2 h-2 rounded-full bg-red-500" title="High Priority"></div>
+                        </div>
+                        <h4 class="font-semibold text-sm mb-2 text-white">Draft Terms & Disclaimer</h4>
+                        <div class="flex items-center gap-2 mt-3">
+                            <div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-[10px]">M</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Col 2 -->
+                <div class="min-w-[280px] w-[280px] flex-shrink-0 bg-gray-850 rounded-xl p-3 border border-gray-800">
+                    <div class="flex items-center justify-between mb-4 px-1">
+                        <span class="font-bold text-yellow-500">🛠️ Dev Building</span>
+                        <span class="bg-gray-700 text-xs px-2 py-1 rounded">1</span>
+                    </div>
+                    <!-- Card Example -->
+                    <div class="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-yellow-500 cursor-pointer shadow-sm transition-all mb-3">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="bg-yellow-900/30 text-yellow-300 text-[10px] px-2 py-0.5 rounded border border-yellow-900">Phase 1</span>
+                        </div>
+                        <h4 class="font-semibold text-sm mb-2 text-white">Booking Logic (30+ days)</h4>
+                        <p class="text-xs text-gray-500 mb-2">Implement hard check for dates.</p>
+                        <div class="flex items-center gap-2 mt-3">
+                            <div class="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center text-[10px]">D</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Col 3 -->
+                <div class="min-w-[280px] w-[280px] flex-shrink-0 bg-gray-850 rounded-xl p-3 border border-gray-800">
+                    <div class="flex items-center justify-between mb-4 px-1">
+                        <span class="font-bold text-purple-400">🔁 Review Together</span>
+                        <span class="bg-gray-700 text-xs px-2 py-1 rounded">1</span>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-purple-500 cursor-pointer shadow-sm transition-all mb-3">
+                        <h4 class="font-semibold text-sm mb-2 text-white">Listing UI Prototype</h4>
+                        <div class="w-full bg-gray-700 rounded-full h-1.5 mt-2">
+                            <div class="bg-purple-500 h-1.5 rounded-full" style="width: 80%"></div>
+                        </div>
+                        <div class="flex items-center gap-1 mt-3 text-xs text-gray-400">
+                            <i class="fa-solid fa-comments"></i> Wait Manager UX Check
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Col 4 -->
+                <div class="min-w-[280px] w-[280px] flex-shrink-0 bg-gray-850 rounded-xl p-3 border border-gray-800">
+                    <div class="flex items-center justify-between mb-4 px-1">
+                        <span class="font-bold text-green-400">🚀 Live / Test</span>
+                    </div>
+                </div>
+
+                <!-- Col 5 -->
+                <div class="min-w-[280px] w-[280px] flex-shrink-0 bg-gray-850 rounded-xl p-3 border border-gray-800">
+                    <div class="flex items-center justify-between mb-4 px-1">
+                        <span class="font-bold text-gray-400">✅ Done</span>
+                    </div>
+                     <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700 opacity-60 mb-3">
+                        <h4 class="font-semibold text-sm mb-2 text-gray-400 line-through">Setup Repo & Hosting</h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Template Showcase -->
+            <div class="mt-8 border-t border-gray-800 pt-6">
+                <h3 class="text-lg font-bold text-white mb-4">Standard Card Template</h3>
+                <div class="glass-panel p-6 max-w-2xl rounded-xl">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex-1 space-y-4">
+                            <div class="border-b border-gray-700 pb-2">
+                                <span class="text-xs font-mono text-blue-400">[Feature Name]</span>
+                                <h4 class="text-xl font-bold">Auto Contract Generator</h4>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div><span class="text-gray-500">Owner:</span> <span class="text-green-400">Dev</span></div>
+                                <div><span class="text-gray-500">Priority:</span> <span class="text-red-400">High</span></div>
+                                <div><span class="text-gray-500">Phase:</span> <span class="text-white">1 (MVP)</span></div>
+                                <div><span class="text-gray-500">Legal Impact:</span> <span class="text-yellow-400">High</span></div>
+                            </div>
+                            <div class="bg-gray-800/50 p-3 rounded text-sm text-gray-300">
+                                <p class="mb-1 text-gray-500 text-xs uppercase">Description</p>
+                                เพื่อสร้างสัญญาเช่าอัตโนมัติ ลดงานเอกสาร Manager
+                            </div>
+                        </div>
+                        <div class="flex-1 bg-gray-900/50 p-4 rounded border border-gray-700">
+                            <h5 class="text-sm font-bold text-gray-400 mb-3 uppercase">Checklist</h5>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-3 text-sm text-gray-300">
+                                    <input type="checkbox" checked class="accent-blue-500 w-4 h-4 rounded">
+                                    <span class="line-through text-gray-500">Manager: Draft Legal Text</span>
+                                </label>
+                                <label class="flex items-center gap-3 text-sm text-gray-300">
+                                    <input type="checkbox" class="accent-green-500 w-4 h-4 rounded">
+                                    <span>Dev: Convert to Variables</span>
+                                </label>
+                                <label class="flex items-center gap-3 text-sm text-gray-300">
+                                    <input type="checkbox" class="accent-green-500 w-4 h-4 rounded">
+                                    <span>Dev: PDF Generation Logic</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: PHASES -->
+        <div id="phases" class="content-section hidden space-y-6">
+            <header class="mb-8">
+                <h2 class="text-3xl font-bold text-white mb-2">Phase Board <span class="text-gray-500 text-xl font-normal">| แผนงานตามระยะเวลา</span></h2>
+            </header>
+
+            <div class="space-y-6">
+                <!-- Phase 0 -->
+                <div class="glass-panel p-6 rounded-xl border-l-4 border-gray-500 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 bg-gray-800 px-3 py-1 rounded-bl text-xs text-gray-400">Month 0-1</div>
+                    <h3 class="text-xl font-bold text-gray-200 mb-1">🧠 Phase 0 : Legal & Strategy</h3>
+                    <div class="flex items-center gap-3 text-sm mb-4">
+                        <span class="role-badge-manager text-xs px-2 py-1 rounded">Owner: Manager</span>
+                        <span class="text-gray-500">Support: Dev</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <ul class="text-sm space-y-2 text-gray-400">
+                            <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gray-500 rounded-full"></div> Define Long-stay only rule</li>
+                            <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-gray-500 rounded-full"></div> Draft Terms & Disclaimer</li>
+                        </ul>
+                        <div class="bg-gray-800 p-3 rounded border border-gray-700">
+                            <span class="text-xs text-green-400 uppercase font-bold">Exit Criteria</span>
+                            <p class="text-sm text-gray-300 mt-1">Dev เขียนระบบได้โดยไม่ต้องถามเรื่องกฎหมายซ้ำ</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 1 -->
+                <div class="glass-panel p-6 rounded-xl border-l-4 border-yellow-500 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 bg-yellow-900/30 px-3 py-1 rounded-bl text-xs text-yellow-500">Month 2-3</div>
+                    <h3 class="text-xl font-bold text-yellow-400 mb-1">🛠️ Phase 1 : MVP Build</h3>
+                    <div class="flex items-center gap-3 text-sm mb-4">
+                        <span class="role-badge-dev text-xs px-2 py-1 rounded">Owner: Dev</span>
+                        <span class="text-gray-500">Decision: Manager</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <ul class="text-sm space-y-2 text-gray-300">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-code text-yellow-500 text-xs"></i> Booking flow (30+ days hard rule)</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-code text-yellow-500 text-xs"></i> Auto contract generator</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-robot text-purple-400 text-xs"></i> AI chatbot basic</li>
+                        </ul>
+                        <div class="bg-gray-800 p-3 rounded border border-gray-700">
+                            <span class="text-xs text-blue-400 uppercase font-bold">Manager Check</span>
+                            <p class="text-sm text-gray-300 mt-1">UX ใช้จริงได้ & ไม่ชนข้อกฎหมาย</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="glass-panel p-6 rounded-xl border-l-4 border-green-500 relative opacity-80 hover:opacity-100 transition-opacity">
+                    <div class="absolute right-0 top-0 bg-gray-800 px-3 py-1 rounded-bl text-xs text-gray-400">Month 4-5</div>
+                    <h3 class="text-xl font-bold text-green-400 mb-1">🚀 Phase 2 : Pilot Launch</h3>
+                    <div class="flex items-center gap-3 text-sm mb-4">
+                        <span class="role-badge-manager text-xs px-2 py-1 rounded">Owner: Manager</span>
+                    </div>
+                    <ul class="text-sm space-y-2 text-gray-400">
+                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-green-500 rounded-full"></div> Onboard first 20-50 properties (Manager)</li>
+                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-green-500 rounded-full"></div> Fix bugs from real users (Dev)</li>
+                    </ul>
+                </div>
+
+                <!-- Future Phases -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-gray-800 p-4 rounded-lg border border-gray-700 opacity-60">
+                        <h4 class="text-blue-300 font-bold mb-2">Phase 3: Monetization</h4>
+                        <p class="text-xs text-gray-400">Month 6-7</p>
+                        <ul class="text-xs mt-2 space-y-1 list-disc list-inside">
+                            <li>Commission Logic</li>
+                            <li>Pricing Service</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-lg border border-gray-700 opacity-60">
+                        <h4 class="text-purple-300 font-bold mb-2">Phase 4: Scale & AI</h4>
+                        <p class="text-xs text-gray-400">Month 8-10</p>
+                        <ul class="text-xs mt-2 space-y-1 list-disc list-inside">
+                            <li>AI Matching Advanced</li>
+                            <li>Dynamic Pricing</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-lg border border-gray-700 opacity-60">
+                        <h4 class="text-white font-bold mb-2">Phase 5: Enterprise</h4>
+                        <p class="text-xs text-gray-400">Month 11-12</p>
+                        <ul class="text-xs mt-2 space-y-1 list-disc list-inside">
+                            <li>Corporate Model</li>
+                            <li>Investor Metrics</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: ROLE BOARDS -->
+        <div id="roles" class="content-section hidden space-y-8">
+            <!-- Manager Decision Board -->
+            <div class="border border-blue-900/50 bg-blue-900/10 rounded-xl p-6">
+                <header class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-white"><i class="fa-solid fa-gavel text-blue-500 mr-2"></i> Manager Decision Tracker</h2>
+                    <span class="text-xs bg-red-900/50 text-red-300 border border-red-800 px-3 py-1 rounded">❗ Dev Works ONLY on Approved</span>
+                </header>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-gray-850 p-4 rounded border border-gray-700">
+                        <h4 class="text-gray-400 font-bold text-sm mb-3 border-b border-gray-700 pb-2">💡 Idea</h4>
+                        <div class="bg-gray-800 p-2 rounded text-sm text-gray-300 mb-2">Membership System?</div>
+                    </div>
+                    <div class="bg-gray-850 p-4 rounded border border-gray-700">
+                        <h4 class="text-yellow-500 font-bold text-sm mb-3 border-b border-gray-700 pb-2">🔍 Validate</h4>
+                        <div class="bg-gray-800 p-2 rounded text-sm text-gray-300 mb-2">Insurance Partner</div>
+                    </div>
+                    <div class="bg-gray-850 p-4 rounded border border-gray-700">
+                        <h4 class="text-green-500 font-bold text-sm mb-3 border-b border-gray-700 pb-2">✅ Approved</h4>
+                        <div class="bg-gray-800 p-2 rounded text-sm text-gray-300 mb-2 border-l-2 border-green-500">Stripe Payment</div>
+                    </div>
+                    <div class="bg-gray-850 p-4 rounded border border-gray-700">
+                        <h4 class="text-red-500 font-bold text-sm mb-3 border-b border-gray-700 pb-2">❌ Rejected</h4>
+                        <div class="bg-gray-800 p-2 rounded text-sm text-gray-500 mb-2 line-through">Daily Rental</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dev System Board -->
+            <div class="border border-green-900/50 bg-green-900/10 rounded-xl p-6">
+                <header class="flex items-center gap-3 mb-6">
+                    <h2 class="text-2xl font-bold text-white"><i class="fa-solid fa-server text-green-500 mr-2"></i> System & AI Tasks</h2>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div class="bg-gray-850 p-3 rounded">
+                        <div class="text-xs font-bold text-gray-500 uppercase mb-2">Backlog</div>
+                        <div class="space-y-2">
+                            <div class="bg-gray-800 p-2 rounded text-xs border border-gray-700">Refactor Auth</div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-850 p-3 rounded">
+                        <div class="text-xs font-bold text-yellow-500 uppercase mb-2">Building</div>
+                         <div class="space-y-2">
+                            <div class="bg-gray-800 p-2 rounded text-xs border border-gray-700 text-white">Booking API</div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-850 p-3 rounded">
+                        <div class="text-xs font-bold text-blue-400 uppercase mb-2">Testing</div>
+                         <div class="space-y-2">
+                            <div class="bg-gray-800 p-2 rounded text-xs border border-gray-700">Email Notify</div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-850 p-3 rounded">
+                        <div class="text-xs font-bold text-green-500 uppercase mb-2">Live</div>
+                         <div class="space-y-2">
+                            <div class="bg-gray-800 p-2 rounded text-xs border border-gray-700 text-gray-400">Landing Page</div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-850 p-3 rounded border border-red-900/30">
+                        <div class="text-xs font-bold text-red-400 uppercase mb-2">Tech Debt</div>
+                         <div class="space-y-2">
+                            <div class="bg-gray-800 p-2 rounded text-xs border border-gray-700 text-red-300">Hardcoded Text</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 5: WEEKLY SYNC -->
+        <div id="sync" class="content-section hidden space-y-6">
+            <header class="mb-6">
+                <h2 class="text-3xl font-bold text-white mb-2">Weekly Sync <span class="text-gray-500 text-xl font-normal">| ประชุมประจำสัปดาห์ (15 min)</span></h2>
+            </header>
+
+            <div class="flex flex-col lg:flex-row gap-6">
+                <!-- Agenda -->
+                <div class="flex-1 glass-panel p-6 rounded-xl">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="fa-regular fa-clipboard"></i> Agenda Template</h3>
+                    <div class="space-y-4">
+                        <div class="flex gap-4 items-start">
+                            <div class="w-8 h-8 rounded-full bg-green-900/50 flex items-center justify-center text-green-500 font-bold">1</div>
+                            <div>
+                                <h4 class="font-bold text-gray-200">What shipped last week?</h4>
+                                <p class="text-sm text-gray-400">สัปดาห์ที่แล้วปล่อยอะไรไปบ้าง</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <div class="w-8 h-8 rounded-full bg-red-900/50 flex items-center justify-center text-red-500 font-bold">2</div>
+                            <div>
+                                <h4 class="font-bold text-gray-200">What blocked?</h4>
+                                <p class="text-sm text-gray-400">ติดปัญหาอะไรตรงไหน</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <div class="w-8 h-8 rounded-full bg-blue-900/50 flex items-center justify-center text-blue-500 font-bold">3</div>
+                            <div>
+                                <h4 class="font-bold text-gray-200">What ships next week?</h4>
+                                <p class="text-sm text-gray-400">สัปดาห์หน้าจะทำอะไรเสร็จ</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <div class="w-8 h-8 rounded-full bg-yellow-900/50 flex items-center justify-center text-yellow-500 font-bold">4</div>
+                            <div>
+                                <h4 class="font-bold text-gray-200">Manager Decision Needed (Yes/No)</h4>
+                                <p class="text-sm text-gray-400">ต้องการการตัดสินใจไหม</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Golden Rules -->
+                <div class="flex-1 glass-panel p-6 rounded-xl border border-yellow-500/30 bg-yellow-900/5">
+                    <h3 class="text-xl font-bold mb-4 text-yellow-500 flex items-center gap-2"><i class="fa-solid fa-crown"></i> Golden Rules (กฎทอง)</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3 bg-gray-800/50 p-3 rounded-lg border border-gray-700">
+                            <i class="fa-solid fa-gavel text-blue-500 mt-1"></i>
+                            <div>
+                                <span class="font-bold text-white">Manager Decides → Dev Executes</span>
+                                <p class="text-xs text-gray-400">Manager ตัดสิน → Dev ทำ (ห้าม Dev คิด Business เอง)</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3 bg-gray-800/50 p-3 rounded-lg border border-gray-700">
+                            <i class="fa-solid fa-lock text-green-500 mt-1"></i>
+                            <div>
+                                <span class="font-bold text-white">Legal-safe by default</span>
+                                <p class="text-xs text-gray-400">ทุกฟีเจอร์ต้องไม่ขัดกฎหมายตั้งแต่วันแรก</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3 bg-gray-800/50 p-3 rounded-lg border border-gray-700">
+                            <i class="fa-solid fa-robot text-purple-500 mt-1"></i>
+                            <div>
+                                <span class="font-bold text-white">AI reduces work, not adds it</span>
+                                <p class="text-xs text-gray-400">ใช้ AI เพื่อลดงาน ไม่ใช่เพิ่มงานดูแล</p>
+                            </div>
+                        </li>
+                         <li class="flex items-start gap-3 bg-gray-800/50 p-3 rounded-lg border border-gray-700">
+                            <i class="fa-solid fa-ban text-red-500 mt-1"></i>
+                            <div>
+                                <span class="font-bold text-white">Finish Phase before New Feature</span>
+                                <p class="text-xs text-gray-400">ไม่เปิดฟีเจอร์ใหม่ถ้าเฟสเดิมไม่จบ</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function switchTab(tabId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('animate-fade-in');
+            });
+
+            // Remove active state from buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.remove('bg-blue-600', 'text-white'); // Remove custom active styles if any
+                btn.classList.add('text-gray-400');
+            });
+
+            // Show selected section
+            const selectedSection = document.getElementById(tabId);
+            selectedSection.classList.remove('hidden');
+            selectedSection.classList.add('animate-fade-in');
+
+            // Set active state on button
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.add('active');
+            activeBtn.classList.remove('text-gray-400');
+        }
+    </script>
+</body>
+</html>
